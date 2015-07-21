@@ -27,6 +27,10 @@ module OmniAuth
         }
       end
 
+      extra do
+        {:raw_info => raw_info}
+      end
+
       def raw_info
         @raw_info ||= begin
                         ri = MultiJson.decode(access_token.get('/api/1.0/user').body)['user']
