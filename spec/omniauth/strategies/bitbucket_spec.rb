@@ -7,7 +7,7 @@ describe OmniAuth::Strategies::Bitbucket do
     
     it 'should fall back to non-primary' do
       strategy.stub_chain(:access_token, :get) do |url|
-        body = url =~ /emails$/ ? %{[{"active": true, "email": "#{email}", "primary": false}]} : '{"user": {}}'
+        body = url =~ /emails$/ ? %{{"pagelen": 10, "values": [{"is_primary": true, "is_confirmed": true, "type": "email", "email": "#{email}", "links": {"self": {"href": "https://bitbucket.org/!api/2.0/user/emails/#{email}"}}}], "page": 1, "size": 1}} : '{"user": {}}'
         double body: body
       end
       strategy.raw_info['email'].should == email
@@ -15,7 +15,7 @@ describe OmniAuth::Strategies::Bitbucket do
   
     it "should prefer primary" do
       strategy.stub_chain(:access_token, :get) do |url|
-        body = url =~ /emails$/ ? %{[{"active": true, "email": "someemail@example.com", "primary": false}, {"active": true, "email": "#{email}", "primary": true}]} : '{"user": {}}'
+        body = url =~ /emails$/ ? %{{"pagelen": 10, "values": [{"is_primary": true, "is_confirmed": true, "type": "email", "email": "#{email}", "links": {"self": {"href": "https://bitbucket.org/!api/2.0/user/emails/#{email}"}}}], "page": 1, "size": 1}} : '{"user": {}}'
         double body: body
       end
       strategy.raw_info['email'].should == email
@@ -23,7 +23,7 @@ describe OmniAuth::Strategies::Bitbucket do
     
     it "should ignore non-existing" do
       strategy.stub_chain(:access_token, :get) do |url|
-        body = url =~ /emails$/ ? %{[]} : '{"user": {}}'
+        body = url =~ /emails$/ ? %{{"pagelen": 0, "values": []}} : '{"user": {}}'
         double body: body
       end
       strategy.raw_info['email'].should be_nil
