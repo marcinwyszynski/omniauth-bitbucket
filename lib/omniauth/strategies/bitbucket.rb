@@ -21,17 +21,18 @@ module OmniAuth
 
       info do
         {
-          :name => "#{raw_info['first_name']} #{raw_info['last_name']}",
-          :avatar => raw_info['avatar'],
+          :name => raw_info['nickname'],
+          :avatar => raw_info['links']['avatar']['href'],
           :email => raw_info['email']
         }
       end
 
       def raw_info
         @raw_info ||= begin
-                        ri = MultiJson.decode(access_token.get('/api/1.0/user').body)['user']
-                        emails = MultiJson.decode(access_token.get('/api/1.0/emails').body)
-                        email_hash = emails.find { |email| email['primary'] } || emails.first || {}
+                        debugger
+                        ri = MultiJson.decode(access_token.get('/api/2.0/user').body)
+                        emails = MultiJson.decode(access_token.get('/api/2.0/user/emails').body)
+                        email_hash = emails['values'].find { |email| email['is_primary'] && email['type'] == 'email' }
                         ri.merge('email' => email_hash['email'])
                       end
       end
