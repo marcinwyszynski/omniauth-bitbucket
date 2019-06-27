@@ -1,4 +1,5 @@
 require 'omniauth-oauth'
+require 'multi_json'
 
 module OmniAuth
   module Strategies
@@ -29,9 +30,8 @@ module OmniAuth
 
       def raw_info
         @raw_info ||= begin
-                        debugger
-                        ri = MultiJson.decode(access_token.get('/api/2.0/user').body)
-                        emails = MultiJson.decode(access_token.get('/api/2.0/user/emails').body)
+                        ri = ::MultiJson.decode(access_token.get('/api/2.0/user').body)
+                        emails = ::MultiJson.decode(access_token.get('/api/2.0/user/emails').body)
                         email_hash = emails['values'].find { |email| email['is_primary'] && email['type'] == 'email' }
                         ri.merge('email' => email_hash['email'])
                       end
