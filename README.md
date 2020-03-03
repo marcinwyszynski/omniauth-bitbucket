@@ -4,6 +4,8 @@ This is the OmniAuth strategy for authenticating to [Bitbucket](https://bitbucke
 To use it, you'll need to signup and create a new application or use your 
 existing OAuth consumer and secret keys.
 
+This repository was originally forked from [sishen/omniauth-bitbucket](https://github.com/sishen/omniauth-bitbucket). Currently it contains also changes from [codeship/omniauth-bitbucket](https://github.com/codeship/omniauth-bitbucket) since the original repository is no longer maintained.
+
 ## Install
 
 Add dependency to your Gemfile:
